@@ -1,6 +1,6 @@
 import { PostService } from './../services/post.service';
 import { Post } from './../models/post.model';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
     selector: 'app-post-input',
@@ -8,14 +8,14 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
     styleUrls: ['./post-input.component.css']
 })
 export class PostInputComponent implements OnInit {
-    post: Post;
-    nomePessoa: string;
-    texto: string;
+    
+    @Input() post: Post;
 
-    constructor() { }
+    constructor() {
+        this.post = new Post(undefined, undefined, undefined, 0);
+    }
 
     onNewPost(event): void {
-        this.post = new Post(undefined, this.nomePessoa, this.texto, 0);
         event.preventDefault();
     }
     ngOnInit() {

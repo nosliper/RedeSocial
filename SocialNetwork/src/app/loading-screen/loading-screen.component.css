@@ -1,7 +1,7 @@
 .loadingscreen {
     margin: 130px auto;
     border: 15px solid #f3f3f3;
-    border-top: 15px solid #08ec7a;
+    border-top: 15px solid gray;
     border-radius: 50%;
     width: 180px;
     height: 180px;

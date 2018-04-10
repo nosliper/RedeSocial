@@ -8,12 +8,12 @@ import { Component, OnInit, Input } from '@angular/core';
 	styleUrls: ['./timeline.component.css']
 })
 export class TimelineComponent implements OnInit {
-
+	public static POSTS: Post[] = [];
 	posts: Post[] = [];
 
 	constructor(private service: PostService) {
-		this.add(new Post(undefined, "Jao", "post content", 0));
-		this.add(new Post(undefined, "Jaozinho", "damn you cássio", 0));
+		// this.add(new Post(undefined, "Jao", "post content", 0));
+		// this.add(new Post(undefined, "Jaozinho", "damn you cássio", 0));
 	}
 
 	ngOnInit() {
@@ -39,13 +39,6 @@ export class TimelineComponent implements OnInit {
 				this.posts[this.getIndex(id)] = data as Post;
 			}
 			, (error) => console.log("Could not update inner post"));
-	}
-
-	private validate(post: Post): boolean {
-		return post &&
-			post.nomePessoa &&
-			post.qtdLikes &&
-			post.texto != "";
 	}
 
 	add(post: Post): void {
@@ -80,11 +73,6 @@ export class TimelineComponent implements OnInit {
         this.service.getAll()
             .subscribe((data) => {
 				this.posts = data as Post[];
-				// for(let post of data as Post[]) { // jerry-rig, remove later
-				// 	if (this.validate(post)) {
-				// 		this.posts.push(post);
-				// 	}
-				// }
 			}
 			, (error) => console.log("Could not get posts"));
     }
