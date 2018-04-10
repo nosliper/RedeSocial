@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { PostService } from './../services/post.service';
+import { Post } from './../models/post.model';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
 	selector: 'app-timeline',
@@ -7,9 +9,83 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TimelineComponent implements OnInit {
 
-	constructor() { }
+	posts: Post[] = [];
+
+	constructor(private service: PostService) {
+		this.add(new Post(undefined, "Jao", "post content", 0));
+		this.add(new Post(undefined, "Jaozinho", "damn you cássio", 0));
+	}
 
 	ngOnInit() {
 	}
 
+	private getIndex(id): number {
+		return this.posts.findIndex((v) => v.id === id);
+	}
+
+	private getById(id): Post {
+		let post: Post;
+		this.service.get(id)
+			.subscribe((data) =>{
+				post = data as Post;
+			}
+			, (error) => console.log("Could not get post"));
+		return post;
+	}
+
+	private update(id): void {
+		this.service.get(id)
+			.subscribe((data) => {
+				this.posts[this.getIndex(id)] = data as Post;
+			}
+			, (error) => console.log("Could not update inner post"));
+	}
+
+	private validate(post: Post): boolean {
+		return post &&
+			post.nomePessoa &&
+			post.qtdLikes &&
+			post.texto != "";
+	}
+
+	add(post: Post): void {
+        this.service.add(post)
+            .subscribe((data) => console.log("added: " + data)
+			, (error) => console.log(error));
+		this.getAll();
+    }
+
+    remove(id): void {
+        this.service.remove(id)
+            .subscribe((data) => console.log("removed: " + data)
+			, (error) => console.log(error));
+			this.posts.splice(this.getIndex(id), 1);
+    }
+
+    addLike(post: Post): void {
+        this.service.addLike(post)
+            .subscribe((data) => console.log("like post: " + data)
+			, (error) => console.log("Could not add like to post"));
+		//this.update(post.id);
+	}
+	
+	edit(post: Post) {
+		this.service.edit(post)
+			.subscribe((data) => console.log("Edited: " + data)
+			, (error) => console.log("Could not edit"));
+		//this.update(post.id);
+	}
+
+    getAll(): void {
+        this.service.getAll()
+            .subscribe((data) => {
+				this.posts = data as Post[];
+				// for(let post of data as Post[]) { // jerry-rig, remove later
+				// 	if (this.validate(post)) {
+				// 		this.posts.push(post);
+				// 	}
+				// }
+			}
+			, (error) => console.log("Could not get posts"));
+    }
 }

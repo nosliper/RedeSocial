@@ -1,3 +1,4 @@
+import { PostService } from './../services/post.service';
 import { Post } from './../models/post.model';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
@@ -6,17 +7,32 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
     templateUrl: './post.component.html',
     styleUrls: ['./post.component.css']
 })
-export class PostComponent implements OnInit {
 
-    @Input("post") post: Post;
-    @Output("clickedlike") clickedLikeButton: EventEmitter<string> = new EventEmitter<string>();
-    constructor() { }
+export class PostComponent implements OnInit {
+    
+    isEditing: boolean;
+    isDeleting: boolean;
+    @Input() post: Post;
+    @Output() clickLike: EventEmitter<Post> = new EventEmitter<Post>();
+    @Output() clickDelete: EventEmitter<number> = new EventEmitter<number>();
+    @Output() clickEdit: EventEmitter<Post> = new EventEmitter<Post>();
+    
+    constructor(private service: PostService) {
+    }
 
     ngOnInit() {
     }
-    onClickLike(event):void {
-        this.post.qtdLikes += 1;
-        this.clickedLikeButton.emit("like button clicked on post " + this.post.id);
+
+    onClickLike(event): void {
+        this.clickLike.emit(this.post);
     }
 
+    onClickDelete(event): void {
+        this.clickDelete.emit(this.post.id);
+    }
+
+    onClickEdit(event) {
+        this.clickEdit.emit(this.post);
+        this.isEditing = false;
+    }
 }
