@@ -9,13 +9,15 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 })
 export class PostInputComponent implements OnInit {
     
-    @Input() post: Post;
+    @Input() post: Post = undefined;
+    @Input() texto: string;
+    @Input() nomePessoa: string;
 
     constructor() {
-        this.post = new Post(undefined, undefined, undefined, 0);
     }
 
     onNewPost(event): void {
+        this.post = new Post(undefined, this.nomePessoa, this.texto, 0)
         event.preventDefault();
     }
     ngOnInit() {

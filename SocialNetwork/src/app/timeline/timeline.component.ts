@@ -12,8 +12,6 @@ export class TimelineComponent implements OnInit {
 	posts: Post[] = [];
 
 	constructor(private service: PostService) {
-		// this.add(new Post(undefined, "Jao", "post content", 0));
-		// this.add(new Post(undefined, "Jaozinho", "damn you cássio", 0));
 	}
 
 	ngOnInit() {
@@ -59,14 +57,12 @@ export class TimelineComponent implements OnInit {
         this.service.addLike(post)
             .subscribe((data) => console.log("like post: " + data)
 			, (error) => console.log("Could not add like to post"));
-		//this.update(post.id);
 	}
 	
 	edit(post: Post) {
 		this.service.edit(post)
 			.subscribe((data) => console.log("Edited: " + data)
 			, (error) => console.log("Could not edit"));
-		//this.update(post.id);
 	}
 
     getAll(): void {
