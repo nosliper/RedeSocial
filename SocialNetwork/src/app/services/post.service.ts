@@ -1,6 +1,6 @@
 import { Post } from './../models/post.model';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -14,7 +14,9 @@ export class PostService {
     constructor(private http: Http) { }
     
     private update(post: Post): Observable<any> {
-        return this.http.put(this.url + "/" + post.id, JSON.stringify(post))
+        let headers: Headers = new Headers();
+        headers.append("Content-Type", "application/json");
+        return this.http.put(this.url + "/" + post.id, JSON.stringify(post), {headers: headers})
             .map((response: Response) => response.text())
             .catch((error: Response) => Observable.throw(error));
     }
